@@ -3,11 +3,6 @@
 import axios from "axios";
 import api from "../../../config/api";
 
-const BASE_URL = `${process.env.REACT_APP_SERVER_ENDPOINT}/${process.env.REACT_APP_SERVER_API_VERSION}`
-axios.defaults.baseURL = BASE_URL;
-
-console.log("BASE_URL", BASE_URL)
-
 // Get Price by Id
 const getPrice = (ids) => {
 
@@ -15,7 +10,29 @@ const getPrice = (ids) => {
 
         await axios({
             method: "get",
-            url: `${api.crypto.getPrice}?ids=${ids}`,
+            url: api.crypto.getPrice(ids),
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((result) => {
+                console.log("result", result)
+            })
+            .catch((err) => {
+                console.log("err", err)
+
+            });
+    };
+};
+
+// Get History by Id
+const getHistory = (ids, date) => {
+
+    console.log(api.crypto.getHistory(ids, date))
+
+    return async (dispatch) => {
+
+        await axios({
+            method: "get",
+            url: `${api.crypto.getHistory(ids, date)}`,
             headers: { "Content-Type": "application/json" },
         })
             .then((result) => {
@@ -35,7 +52,7 @@ const getTokenPriceByAddress = (blockchain, token) => {
 
         await axios({
             method: "get",
-            url: `${api.crypto.getTokenPriceByAddress}/${blockchain}?contract_addresses=${token}`,
+            url: api.crypto.getTokenPriceByAddress(blockchain, token),
             headers: { "Content-Type": "application/json" },
         })
             .then((result) => {
@@ -50,6 +67,7 @@ const getTokenPriceByAddress = (blockchain, token) => {
 
 export {
     getPrice,
+    getHistory,
     getTokenPriceByAddress,
 };
 

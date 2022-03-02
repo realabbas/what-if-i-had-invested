@@ -14,6 +14,7 @@ const Home = () => {
     React.useEffect(() => {
         dispatch(calls.getTokenPriceByAddress(blockchain, address, currency))
         dispatch(calls.getPrice("bitcoin", currency))
+        dispatch(calls.getHistory("bitcoin", "30-12-2021"))
 
     }, [])
     return <h3>Home</h3>

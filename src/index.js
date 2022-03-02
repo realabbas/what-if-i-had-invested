@@ -8,6 +8,9 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { persistor, store } from './utils/store';
 
+const BASE_URL = `/api/${process.env.REACT_APP_SERVER_API_VERSION}`
+axios.defaults.baseURL = BASE_URL
+
 // Interceptor to modify URL before sending request
 axios.interceptors.request.use(function (config) {
 
@@ -19,6 +22,7 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error);
 });
+
 
 ReactDOM.render(
   <React.StrictMode>

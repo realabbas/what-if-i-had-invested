@@ -1,8 +1,9 @@
 /* eslint-disable */
 const api = {
     crypto: {
-        getPrice: "/simple/price",
-        getTokenPriceByAddress: "/simple/token_price/",
+        getPrice: (ids) => `/simple/price?ids=${ids}`,
+        getTokenPriceByAddress: (blockchain, token) => `/simple/token_price/${blockchain}?contract_addresses=${token}`,
+        getHistory: (ids, date) => `/coins/${ids}/history?date=${date}`
     },
 };
 
