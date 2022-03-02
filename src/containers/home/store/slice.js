@@ -4,11 +4,11 @@ import { createSlice } from '@reduxjs/toolkit';
 export const authSlice = createSlice({
   name: 'app',
   initialState: {
-    currentStep: 0,
+    assetList: null,
   },
   reducers: {
     resetStore: (state, action) => {
-      state.currentStep = 0;
+      state.assetList = null;
     },
     changeState: (state, action) => {
       const varName = Object.keys(action.payload)[0];

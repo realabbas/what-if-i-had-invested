@@ -14,10 +14,19 @@ axios.defaults.baseURL = BASE_URL
 // Interceptor to modify URL before sending request
 axios.interceptors.request.use(function (config) {
 
+  console.log("config before", config)
+  
   // Add currency parameter in the URL
   const currency = "usd"
-  config.url += `&vs_currencies=${currency}`
+  if (config.url.includes('/coins/market')) {
+    config.url += `&vs_currency=${currency}`
+  }
+  else {
+    config.url += `&vs_currencies=${currency}`
+  }
   
+  console.log("config after", config)
+
   return config;
 }, function (error) {
   return Promise.reject(error);
