@@ -8,6 +8,7 @@ export const authSlice = createSlice({
     supportedCurriencies: null,
     currency: "usd",
     assetHistory: null,
+    particularAssetDetail: null
   },
   reducers: {
     resetStore: (state, action) => {
@@ -15,6 +16,7 @@ export const authSlice = createSlice({
       state.supportedCurriencies = null;
       state.currency = "usd";
       state.assetHistory = null;
+      state.particularAssetDetail = null;
     },
     changeState: (state, action) => {
       const varName = Object.keys(action.payload)[0];

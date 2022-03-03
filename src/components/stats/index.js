@@ -16,7 +16,7 @@ const Stats = ({ asset }) => {
         <Grid container key={idx} spacing={2}>
             {row.map(product =>
                 <Grid item xs={12} sm={6} md={3} lg={3}>
-                    <Card data={product} asset={asset} />
+                    <Card data={product} value={asset[product]} />
                 </Grid>)}
         </Grid>)
     );

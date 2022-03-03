@@ -2,12 +2,15 @@
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from 'react-redux';
+import StatCard from '../../components/card';
+import Picker from '../../components/picker';
 import Select from '../../components/select';
 import Stats from '../../components/stats';
+import Graph from './graph';
 import * as calls from './store/calls';
+import { actions } from './store/slice';
 
 const Home = () => {
 
@@ -50,23 +53,25 @@ const Home = () => {
 
     }, [])
 
-    console.log(startDate, formatDate(startDate))
-
     const compute = () => {
-        const past_price = appState.assetHistory.market_data.current_price.usd;
-        const current_price = selectedAsset.current_price
-        const percentageDifference = (((current_price - past_price) / past_price) * 100)
-        return {
-            past_price,
-            current_price,
-            difference: (current_price - past_price),
-            percentageDifference,
-            multiplier: investedValue * (1 + (percentageDifference / 100)),
-            investedValue: percentageDifference > 0 ? investedValue + (parseFloat(investedValue) * percentageDifference) / 100 :
-                investedValue + (parseFloat(investedValue) * percentageDifference) / 100
+        try {
+            const past_price = appState.assetHistory.market_data.current_price.usd;
+            const current_price = selectedAsset.current_price
+            const percentageDifference = (((current_price - past_price) / past_price) * 100)
+            return {
+                past_price,
+                current_price,
+                difference: (current_price - past_price),
+                percentageDifference,
+                multiplier: investedValue * (1 + (percentageDifference / 100)),
+                investedValue: percentageDifference > 0 ? investedValue + (parseFloat(investedValue) * percentageDifference) / 100 :
+                    investedValue + (parseFloat(investedValue) * percentageDifference) / 100
+            }
+        }
+        catch (e) {
+            console.log(e)
         }
     }
-
 
     return (
         <div style={{ margin: "1em" }}>
@@ -79,52 +84,97 @@ const Home = () => {
             /> */}
 
             <Grid container spacing={2}>
-                <Grid item lg={3}>
+                <Grid item lg={2}>
                     <Select
                         cryptocurrency={true}
                         label="Cryptocurrency"
                         data={appState.assetList}
-                        action={(asset) => setSelectedAsset(asset)}
+                        action={(asset) => {
+                            setSelectedAsset(asset);
+                            dispatch(calls.getParticularAssetDetail(asset.id))
+                            dispatch(actions.changeState({ assetHistory: null }))
+                        }}
                     />
                 </Grid>
-                <Grid item={3}>
+                <Grid item lg={2}>
+                    {/* <DatePicker
+                        selected={startDate}
+                        onChange={(date) => {
+                            setStartDate(date)
+                            dispatch(calls.getHistory(selectedAsset.id, formatDate(date)))
+                        }} /> */}
+                    <Picker action={(date) => {
+                        setStartDate(date)
+                        dispatch(calls.getHistory(selectedAsset.id, formatDate(date)))
+                    }} />
+                </Grid>
+                <Grid item={2}>
                     <TextField
                         id="outlined-basic"
                         label="Invested"
                         variant="outlined"
                         value={investedValue}
+                        onKeyDown={(event) => {
+                            if (event.keyCode === 13) {
+                                dispatch(calls.getHistory(selectedAsset.id, formatDate(startDate)))
+                            }
+                        }}
                         onChange={(e) => setInvestedValue(e.target.value)}
                     />
                 </Grid>
-                <Grid item lg={3}>
 
-                    <DatePicker
-                        selected={startDate}
-                        onChange={(date) => {
-                            setStartDate(date)
-                            dispatch(calls.getHistory(selectedAsset.id, formatDate(date)))
-                        }} />
-                </Grid>
+                {/* <Grid item={6}>
+                    <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
+                        <span>
+                            Crypto Data powered by
+                        </span>
+                        <img
+                            alt="logo"
+                            src="https://static.coingecko.com/s/coingecko-logo-d13d6bcceddbb003f146b33c2f7e8193d72b93bb343d38e392897c3df3e78bdd.png"
+                            style={{ height: 35, marginLeft: 8 }}
+                        />
+                    </div>
+                </Grid> */}
 
-                {appState.assetHistory && selectedAsset ? <Grid item lg={3}>
-                    <p variant="h3">
-                        Current Price :  =   ${compute().current_price}
-                        <br />
-                        <br />
-                        Past Price :   =    ${compute().past_price}
-                        <br />
-                        <br />
-                        Difference :  =     ${compute().difference}
-                        <br />
-                        <br />
-                        PercentageDifference : =     {compute().percentageDifference}
-                        <br />
-                        <br />
-                        If you had invested {investedValue}, it would have become ${compute().multiplier}
-                    </p>
-                </Grid> : null}
+                {/* {appState.particularAssetDetail ?
+                    // 0A1829
+                    <Card sx={{ backgroundColor: "#0A1829", m: 2, p:2 }}>
+                        <Typography sx={{ color: "rgb(194,225,254)" }} >
+                            {appState.particularAssetDetail.description.en}
+                        </Typography>
+                    </Card> : null} */}
+
+                {appState.assetHistory && selectedAsset ?
+                    <Grid sx={{ m: 0.2 }} container spacing={2} >
+                        <Grid item lg={3}>
+                            <StatCard backgroundColor="#0A1829" data={"current_price"} value={compute().current_price.toFixed(5)} />
+                        </Grid>
+                        <Grid item lg={3}>
+                            <StatCard backgroundColor="#0A1829" data={"past_price"} value={compute().past_price.toFixed(5)} />
+                        </Grid>
+                        {/* <Grid item lg={3}>
+                            <StatCard backgroundColor="#0A1829" data={"difference"} value={compute().difference} />
+                        </Grid> */}
+                        <Grid item lg={3}>
+                            <StatCard backgroundColor="#0A1829" data={"percentage_difference_%"} value={compute().percentageDifference.toFixed(2)} />
+                        </Grid>
+                        <Grid item lg={3}>
+                            <StatCard
+                                backgroundColor="#0A1829"
+                                data={"current_value_of_invest_amount"}
+                                value={compute().multiplier.toFixed(2)}
+                                color={compute().current_price > compute().past_price ? "green" : "#e23737"}
+                            />
+                        </Grid>
+                    </Grid>
+                    : null}
             </Grid>
 
+            {selectedAsset ?
+                <div style={{ marginTop: 50 }}>
+                    <Graph asset={selectedAsset} />
+                </div>
+                : null}
             {selectedAsset ?
                 <div style={{ marginTop: 20 }}>
                     <Stats asset={selectedAsset} />

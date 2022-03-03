@@ -4,8 +4,8 @@ import axios from "axios";
 import api from "../../../config/api";
 import { actions } from './slice';
 
-const BASE_URL = `/api/${process.env.REACT_APP_SERVER_API_VERSION}`
-axios.defaults.baseURL = BASE_URL
+// const BASE_URL = `/api/${process.env.REACT_APP_SERVER_API_VERSION}`
+// axios.defaults.baseURL = BASE_URL
 
 // Get Price by Id
 const getPrice = (ids, currency) => {
@@ -83,6 +83,20 @@ const getAllAssets = (per_page, page, currency) => {
     }
 }
 
+const getParticularAssetDetail = (asset) => {
+    return async (dispatch) => {
+        await axios({
+            method: "get",
+            url: api.crypto.getParticularAssetDetail(asset),
+        })
+            .then(result => {
+                dispatch(actions.changeState({ particularAssetDetail: result.data }))
+            }).catch((err) => {
+                console.log("err", err)
+            });
+    }
+}
+
 const getSupportedCurriencies = () => {
     return async (dispatch) => {
         await axios({
@@ -102,6 +116,7 @@ export {
     getHistory,
     getTokenPriceByAddress,
     getAllAssets,
+    getParticularAssetDetail,
     getSupportedCurriencies
 };
 
