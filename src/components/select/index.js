@@ -7,12 +7,12 @@ import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import * as React from 'react';
 
-export default function BasicSelect({ assetList, selectAsset }) {
-    const [selectedAsset, setSelectedAsset] = React.useState('Select');
+export default function BasicSelect({ data, action, cryptocurrency , currency, label}) {
+    const [selected, setSelected] = React.useState('Select');
 
     const handleChange = (event) => {
-        setSelectedAsset(event.target.value);
-        selectAsset(event.target.value)
+        setSelected(event.target.value);
+        action(event.target.value)
     };
 
     const renderItem = (name, image_uri) => {
@@ -30,17 +30,17 @@ export default function BasicSelect({ assetList, selectAsset }) {
 
     return (
         <FormControl sx={{ width: 200 }}>
-            <InputLabel id="demo-simple-select-label">Cryptocurrency</InputLabel>
+            <InputLabel id="demo-simple-select-label">{label}</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={selectedAsset}
-                label="Cryptocurrency"
+                value={selected}
+                label={label}
                 onChange={handleChange}
             >
-                {assetList ? assetList.map((i, j) => {
+                {data ? data.map((i, j) => {
                     return <MenuItem value={i}>
-                        {renderItem(i.name, i.image)}
+                        {cryptocurrency ? renderItem(i.name, i.image) : i.toUpperCase()}
                     </MenuItem>
 
                 }) : null}

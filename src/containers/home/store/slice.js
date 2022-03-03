@@ -5,10 +5,16 @@ export const authSlice = createSlice({
   name: 'app',
   initialState: {
     assetList: null,
+    supportedCurriencies: null,
+    currency: "usd",
+    assetHistory: null,
   },
   reducers: {
     resetStore: (state, action) => {
       state.assetList = null;
+      state.supportedCurriencies = null;
+      state.currency = "usd";
+      state.assetHistory = null;
     },
     changeState: (state, action) => {
       const varName = Object.keys(action.payload)[0];

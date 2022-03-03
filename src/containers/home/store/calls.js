@@ -4,14 +4,17 @@ import axios from "axios";
 import api from "../../../config/api";
 import { actions } from './slice';
 
+const BASE_URL = `/api/${process.env.REACT_APP_SERVER_API_VERSION}`
+axios.defaults.baseURL = BASE_URL
+
 // Get Price by Id
-const getPrice = (ids) => {
+const getPrice = (ids, currency) => {
 
     return async (dispatch) => {
 
         await axios({
             method: "get",
-            url: api.crypto.getPrice(ids),
+            url: api.crypto.getPrice(ids, currency),
             headers: { "Content-Type": "application/json" },
         })
             .then((result) => {
@@ -38,10 +41,10 @@ const getHistory = (ids, date) => {
         })
             .then((result) => {
                 console.log("result", result)
+                dispatch(actions.changeState({ assetHistory: result.data }))
             })
             .catch((err) => {
                 console.log("err", err)
-
             });
     };
 };
@@ -66,21 +69,31 @@ const getTokenPriceByAddress = (blockchain, token) => {
     };
 };
 
-// curl https://rest.coinapi.io/v1/assets \
-//   --request GET
-//   --header "X-CoinAPI-Key: 73034021-THIS-IS-SAMPLE-KEY"
-
-const getAllAssets = (per_page, page) => {
+const getAllAssets = (per_page, page, currency) => {
     return async (dispatch) => {
         await axios({
             method: "get",
-            url: api.crypto.getAllAssets(per_page, page),
-            headers: { "X-CoinAPI-Key": "2210EDB9-B6D0-4721-B17E-4EBA3A05885B" }
+            url: api.crypto.getAllAssets(per_page, page, currency),
         })
             .then(result => {
-                console.log("re", result)
                 dispatch(actions.changeState({ assetList: result.data }))
-            })
+            }).catch((err) => {
+                console.log("err", err)
+            });
+    }
+}
+
+const getSupportedCurriencies = () => {
+    return async (dispatch) => {
+        await axios({
+            method: "get",
+            url: api.crypto.getSupportedCurriencies,
+        })
+            .then(result => {
+                dispatch(actions.changeState({ supportedCurriencies: result.data }))
+            }).catch((err) => {
+                console.log("err", err)
+            });
     }
 }
 
@@ -88,6 +101,7 @@ export {
     getPrice,
     getHistory,
     getTokenPriceByAddress,
-    getAllAssets
+    getAllAssets,
+    getSupportedCurriencies
 };
 
