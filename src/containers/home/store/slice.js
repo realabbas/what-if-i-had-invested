@@ -4,11 +4,21 @@ import { createSlice } from '@reduxjs/toolkit';
 export const authSlice = createSlice({
   name: 'app',
   initialState: {
-    currentStep: 0,
+    assetList: null,
+    supportedCurriencies: null,
+    currency: "usd",
+    assetHistory: null,
+    particularAssetDetail: null,
+    blockchainPlatforms: null
   },
   reducers: {
     resetStore: (state, action) => {
-      state.currentStep = 0;
+      state.assetList = null;
+      state.supportedCurriencies = null;
+      state.currency = "usd";
+      state.assetHistory = null;
+      state.particularAssetDetail = null;
+      state.blockchainPlatforms = null;
     },
     changeState: (state, action) => {
       const varName = Object.keys(action.payload)[0];
