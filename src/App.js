@@ -7,7 +7,7 @@ const App = () => {
 
   const [loading, setLoading] = React.useState(false)
 
-  const BASE_URL = `/api/${process.env.REACT_APP_SERVER_API_VERSION}`
+  const BASE_URL = `${process.env.REACT_APP_SERVER_ENDPOINT}/api/${process.env.REACT_APP_SERVER_API_VERSION}`
   axios.defaults.baseURL = BASE_URL
 
   // Interceptor to modify URL before sending request
