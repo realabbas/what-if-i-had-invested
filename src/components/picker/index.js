@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import * as React from 'react';
 
 export default function MaterialUIPickers({action}) {
-  const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
+  const [value, setValue] = React.useState(new Date());
 
   const handleChange = (newValue) => {
     setValue(newValue);

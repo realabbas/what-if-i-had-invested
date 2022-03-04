@@ -17,8 +17,10 @@ const Home = () => {
     const dispatch = useDispatch();
     const appState = useSelector((state) => state.app)
     const [selectedAsset, setSelectedAsset] = useState(null)
+    const [selectedPlatform, setSelectedPlatform] = useState(null)
     const [startDate, setStartDate] = useState(new Date());
     const [investedValue, setInvestedValue] = useState(500)
+    const [contractAddress, setContractAddress] = useState('')
 
     const blockchain = "ethereum"
     const address = "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
@@ -47,6 +49,9 @@ const Home = () => {
         if (!appState.supportedCurriencies) {
             dispatch(calls.getSupportedCurriencies())
         }
+        if (!appState.blockchainPlatforms) {
+            dispatch(calls.getBlockchainPlatforms())
+        }
         // if (!appState.assetList) {
         dispatch(calls.getAllAssets(100, 1, appState.currency))
         // }
@@ -72,6 +77,13 @@ const Home = () => {
             console.log(e)
         }
     }
+    
+    const handleReset=()=>{
+        setSelectedAsset(null);
+        setSelectedPlatform(null);
+        setStartDate(new Date());
+        setContractAddress('')
+    }
 
     return (
         <div style={{ margin: "1em" }}>
@@ -96,6 +108,33 @@ const Home = () => {
                         }}
                     />
                 </Grid>
+                {selectedAsset == null ?
+                    <>
+                        <Grid item lg={2}>
+                            <Select
+                                cryptocurrency={true}
+                                label="Blockchain Platforms"
+                                data={appState.blockchainPlatforms}
+                                action={(platform) => {
+                                    setSelectedPlatform(platform);
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={2}>
+                            <TextField
+                                id="outlined-basic"
+                                label="Contract Address"
+                                variant="outlined"
+                                value={contractAddress}
+                                onChange={(e) => {
+                                    setContractAddress(e.target.value)
+                                    dispatch(calls.getTokenPriceByAddress(selectedPlatform, e.target.value, appState.currency))
+                                }}
+                            />
+                        </Grid>
+                    </>
+                    : null}
+
                 <Grid item lg={2}>
                     {/* <DatePicker
                         selected={startDate}
@@ -112,6 +151,7 @@ const Home = () => {
                     <TextField
                         id="outlined-basic"
                         label="Invested"
+                        type="number"
                         variant="outlined"
                         value={investedValue}
                         onKeyDown={(event) => {
@@ -144,7 +184,13 @@ const Home = () => {
                         </Typography>
                     </Card> : null} */}
 
-                {appState.assetHistory && selectedAsset ?
+               <Grid item={2}>
+               <p onClick={()=> handleReset()} >
+                    RESET
+                </p>
+               </Grid>
+
+                {appState.assetHistory && appState.assetHistory.market_data && selectedAsset ?
                     <Grid sx={{ m: 0.2 }} container spacing={2} >
                         <Grid item lg={3}>
                             <StatCard backgroundColor="#0A1829" data={"current_price"} value={compute().current_price.toFixed(5)} />
@@ -156,7 +202,7 @@ const Home = () => {
                             <StatCard backgroundColor="#0A1829" data={"difference"} value={compute().difference} />
                         </Grid> */}
                         <Grid item lg={3}>
-                            <StatCard backgroundColor="#0A1829" data={"percentage_difference_%"} value={compute().percentageDifference.toFixed(2)} />
+                            <StatCard backgroundColor="#0A1829" data={"percentage_difference_%"} value={compute().percentageDifference.toFixed(5)} />
                         </Grid>
                         <Grid item lg={3}>
                             <StatCard
@@ -169,6 +215,8 @@ const Home = () => {
                     </Grid>
                     : null}
             </Grid>
+
+
 
             {selectedAsset ?
                 <div style={{ marginTop: 50 }}>

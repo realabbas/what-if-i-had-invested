@@ -27,6 +27,8 @@ const Graph = ({ asset }) => {
       )
   }, [asset])
 
+  console.log("dp", dataPoints)
+
   const options = {
     title: {
       text: "Price Variation"
@@ -59,7 +61,7 @@ const Graph = ({ asset }) => {
         name: "Price (in USD)",
         type: "splineArea",
         color: "#3576a8",
-        yValueFormatString: "$#,###.##",
+        yValueFormatString: "$#",
         xValueFormatString: "MMM DD YYYY",
         dataPoints
       }]

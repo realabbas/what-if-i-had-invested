@@ -50,13 +50,13 @@ const getHistory = (ids, date) => {
 };
 
 // Get Price by Contract Address of the token deployed on that blockchain
-const getTokenPriceByAddress = (blockchain, token) => {
+const getTokenPriceByAddress = (blockchain, token, currency) => {
 
     return async (dispatch) => {
 
         await axios({
             method: "get",
-            url: api.crypto.getTokenPriceByAddress(blockchain, token),
+            url: api.crypto.getTokenPriceByAddress(blockchain, token, currency),
             headers: { "Content-Type": "application/json" },
         })
             .then((result) => {
@@ -97,6 +97,30 @@ const getParticularAssetDetail = (asset) => {
     }
 }
 
+const getBlockchainPlatforms = (asset) => {
+    return async (dispatch) => {
+        await axios({
+            method: "get",
+            url: api.crypto.getBlockchainPlatforms,
+        })
+            .then(result => {
+
+                const temp = result.data.sort(function (a, b) {
+                    var keyA = a.name,
+                        keyB = b.name;
+                    // Compare the 2 dates
+                    if (keyA < keyB) return -1;
+                    if (keyA > keyB) return 1;
+                    return 0;
+                });
+
+                dispatch(actions.changeState({ blockchainPlatforms: temp }))
+            }).catch((err) => {
+                console.log("err", err)
+            });
+    }
+}
+
 const getSupportedCurriencies = () => {
     return async (dispatch) => {
         await axios({
@@ -117,6 +141,7 @@ export {
     getTokenPriceByAddress,
     getAllAssets,
     getParticularAssetDetail,
-    getSupportedCurriencies
+    getSupportedCurriencies,
+    getBlockchainPlatforms
 };
 
