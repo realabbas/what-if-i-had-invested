@@ -1,2 +1,9 @@
-/api/* https://api.coingecko.com/api/:splat 200
-/* /index.html 200
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/api/*"
+  to = "https://api.coingecko.com/api/:splat"
+  status = 200
+  force = true
