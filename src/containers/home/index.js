@@ -13,6 +13,24 @@ import Graph from './graph';
 import * as calls from './store/calls';
 import { actions } from './store/slice';
 
+const styles = {
+    resetButton: {
+        backgroundColor: "red", color: "white"
+    },
+    grid: {
+        m: 0.2
+    },
+    margin: {
+        marginTop: 50
+    },
+    title: {
+        display: "flex", alignItems: "center", marginTop: 10
+    },
+    logo: {
+        height: 35, marginLeft: 8
+    }
+}
+
 const Home = () => {
 
     const dispatch = useDispatch();
@@ -45,17 +63,14 @@ const Home = () => {
     };
 
     React.useEffect(async () => {
-        // dispatch(calls.getTokenPriceByAddress(blockchain, address, currency))
-        // dispatch(calls.getHistory("bitcoin", "02-03-2022"))
+
         if (!appState.supportedCurriencies) {
             dispatch(calls.getSupportedCurriencies())
         }
         if (!appState.blockchainPlatforms) {
             dispatch(calls.getBlockchainPlatforms())
         }
-        // if (!appState.assetList) {
         dispatch(calls.getAllAssets(100, 1, appState.currency))
-        // }
 
     }, [])
 
@@ -167,28 +182,28 @@ const Home = () => {
                 <Grid item={2}>
                     <Button
                         variant="filled"
-                        sx={{ backgroundColor: "red", color: "white" }}
+                        sx={styles.resetButton}
                         onClick={() => handleReset()} >
                         RESET
                     </Button>
                 </Grid>
 
                 <Grid item={6}>
-                    <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
+                    <div style={styles.title}>
                         <span>
                             Crypto Data powered by
                         </span>
                         <img
                             alt="logo"
                             src="https://static.coingecko.com/s/coingecko-logo-d13d6bcceddbb003f146b33c2f7e8193d72b93bb343d38e392897c3df3e78bdd.png"
-                            style={{ height: 35, marginLeft: 8 }}
+                            style={styles.logo}
                         />
                     </div>
                 </Grid>
 
 
                 {appState.assetHistory && appState.assetHistory.market_data && selectedAsset ?
-                    <Grid sx={{ m: 0.2 }} container spacing={2} >
+                    <Grid sx={styles.grid} container spacing={2} >
                         <Grid item lg={3}>
                             <StatCard backgroundColor="#0A1829" data={"current_price"} value={compute().current_price.toFixed(5)} />
                         </Grid>
@@ -214,12 +229,12 @@ const Home = () => {
 
 
             {selectedAsset ?
-                <div style={{ marginTop: 50 }}>
+                <div style={styles.margin}>
                     <Graph asset={selectedAsset} />
                 </div>
                 : null}
             {selectedAsset ?
-                <div style={{ marginTop: 20 }}>
+                <div style={styles.margin}>
                     <Stats asset={selectedAsset} />
                     <pre>
                         <code>
