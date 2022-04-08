@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
@@ -77,8 +78,8 @@ const Home = () => {
             console.log(e)
         }
     }
-    
-    const handleReset=()=>{
+
+    const handleReset = () => {
         setSelectedAsset(null);
         setSelectedPlatform(null);
         setStartDate(new Date());
@@ -108,7 +109,7 @@ const Home = () => {
                         }}
                     />
                 </Grid>
-                {selectedAsset == null ?
+                {/* {selectedAsset == null ?
                     <>
                         <Grid item lg={2}>
                             <Select
@@ -133,7 +134,7 @@ const Home = () => {
                             />
                         </Grid>
                     </>
-                    : null}
+                    : null} */}
 
                 <Grid item lg={2}>
                     {/* <DatePicker
@@ -163,7 +164,16 @@ const Home = () => {
                     />
                 </Grid>
 
-                {/* <Grid item={6}>
+                <Grid item={2}>
+                    <Button
+                        variant="filled"
+                        sx={{ backgroundColor: "red", color: "white" }}
+                        onClick={() => handleReset()} >
+                        RESET
+                    </Button>
+                </Grid>
+
+                <Grid item={6}>
                     <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
                         <span>
                             Crypto Data powered by
@@ -174,21 +184,8 @@ const Home = () => {
                             style={{ height: 35, marginLeft: 8 }}
                         />
                     </div>
-                </Grid> */}
+                </Grid>
 
-                {/* {appState.particularAssetDetail ?
-                    // 0A1829
-                    <Card sx={{ backgroundColor: "#0A1829", m: 2, p:2 }}>
-                        <Typography sx={{ color: "rgb(194,225,254)" }} >
-                            {appState.particularAssetDetail.description.en}
-                        </Typography>
-                    </Card> : null} */}
-
-               <Grid item={2}>
-               <p onClick={()=> handleReset()} >
-                    RESET
-                </p>
-               </Grid>
 
                 {appState.assetHistory && appState.assetHistory.market_data && selectedAsset ?
                     <Grid sx={{ m: 0.2 }} container spacing={2} >
@@ -198,16 +195,14 @@ const Home = () => {
                         <Grid item lg={3}>
                             <StatCard backgroundColor="#0A1829" data={"past_price"} value={compute().past_price.toFixed(5)} />
                         </Grid>
-                        {/* <Grid item lg={3}>
-                            <StatCard backgroundColor="#0A1829" data={"difference"} value={compute().difference} />
-                        </Grid> */}
+
                         <Grid item lg={3}>
                             <StatCard backgroundColor="#0A1829" data={"percentage_difference_%"} value={compute().percentageDifference.toFixed(5)} />
                         </Grid>
                         <Grid item lg={3}>
                             <StatCard
                                 backgroundColor="#0A1829"
-                                data={"current_value_of_invest_amount"}
+                                data={"current_value_of_invested_amount"}
                                 value={compute().multiplier.toFixed(2)}
                                 color={compute().current_price > compute().past_price ? "green" : "#e23737"}
                             />

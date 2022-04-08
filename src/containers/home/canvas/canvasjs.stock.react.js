@@ -1,4 +1,4 @@
-﻿/*
+/*
 CanvasJS React StockCharts - https://canvasjs.com/
 Copyright 2022 fenopix
 

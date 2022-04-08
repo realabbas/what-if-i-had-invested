@@ -15,7 +15,7 @@ export default function MaterialUIPickers({action}) {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DesktopDatePicker
-          label="Date desktop"
+          label="Pick Date"
           inputFormat="MM/dd/yyyy"
           value={value}
           onChange={handleChange}
