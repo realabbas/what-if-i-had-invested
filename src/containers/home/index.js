@@ -15,7 +15,8 @@ import { actions } from './store/slice';
 
 const styles = {
     resetButton: {
-        backgroundColor: "red", color: "white"
+        backgroundColor: "red",
+        color: "white"
     },
     grid: {
         m: 0.2
@@ -24,10 +25,15 @@ const styles = {
         marginTop: 50
     },
     title: {
-        display: "flex", alignItems: "center", marginTop: 10
+        display: "flex",
+        alignItems: "center",
+        marginTop: 10
     },
     logo: {
         height: 35, marginLeft: 8
+    },
+    topContainer: {
+        margin: "1em"
     }
 }
 
@@ -44,8 +50,6 @@ const Home = () => {
     const blockchain = "ethereum"
     const address = "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
     const currency = "inr"
-
-    console.log("selectedAsset", selectedAsset)
 
     const formatDate = (date) => {
         let today = date;
@@ -102,14 +106,7 @@ const Home = () => {
     }
 
     return (
-        <div style={{ margin: "1em" }}>
-
-            {/* <Select
-                currency={true}
-                label="Currency"
-                data={appState.supportedCurriencies ? appState.supportedCurriencies.sort() : null}
-                action={(currency) => dispatch(actions.changeState({ currency }))}
-            /> */}
+        <div style={styles.topContainer}>
 
             <Grid container spacing={2}>
                 <Grid item lg={2}>
@@ -124,40 +121,8 @@ const Home = () => {
                         }}
                     />
                 </Grid>
-                {/* {selectedAsset == null ?
-                    <>
-                        <Grid item lg={2}>
-                            <Select
-                                cryptocurrency={true}
-                                label="Blockchain Platforms"
-                                data={appState.blockchainPlatforms}
-                                action={(platform) => {
-                                    setSelectedPlatform(platform);
-                                }}
-                            />
-                        </Grid>
-                        <Grid item lg={2}>
-                            <TextField
-                                id="outlined-basic"
-                                label="Contract Address"
-                                variant="outlined"
-                                value={contractAddress}
-                                onChange={(e) => {
-                                    setContractAddress(e.target.value)
-                                    dispatch(calls.getTokenPriceByAddress(selectedPlatform, e.target.value, appState.currency))
-                                }}
-                            />
-                        </Grid>
-                    </>
-                    : null} */}
 
                 <Grid item lg={2}>
-                    {/* <DatePicker
-                        selected={startDate}
-                        onChange={(date) => {
-                            setStartDate(date)
-                            dispatch(calls.getHistory(selectedAsset.id, formatDate(date)))
-                        }} /> */}
                     <Picker action={(date) => {
                         setStartDate(date)
                         dispatch(calls.getHistory(selectedAsset.id, formatDate(date)))
