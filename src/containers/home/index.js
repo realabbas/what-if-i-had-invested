@@ -33,7 +33,8 @@ const styles = {
         height: 35, marginLeft: 8
     },
     topContainer: {
-        margin: "1em"
+        margin: "1em",
+        overflowX: "hidden"
     }
 }
 
